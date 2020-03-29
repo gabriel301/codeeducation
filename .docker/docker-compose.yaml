@@ -29,6 +29,16 @@ services:
     app:
         build: ./laravel #Diretorio do dockerfile para criação da imagem 
         container_name: app
+        environment: #Variáveis de ambiente do template
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_DATABASE=laravel
+            - DB_USERNAME=root
+            - DB_PASSWORD=root
+            - REDIS_HOST=redis
+            - REDIS_PASSWORD=null
+            - REDIS_PORT=6379
+            
         #Comando que será chamado quando o container subir
         #entrypoint: ./laravel/entrypoint.sh
         depends_on: #Mostra quais serviços devem ser iniciados antes desse
