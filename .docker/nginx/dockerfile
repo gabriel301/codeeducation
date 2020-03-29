@@ -1,0 +1,10 @@
+FROM nginx:1.15.0-alpine
+#Instala Bash, Vim 
+RUN apk --update add bash vim
+#Instala dockerize
+RUN apk add --no-cache openssl
+    
+#Remove a configuração padrão do nginx
+RUN rm /etc/nginx/conf.d/default.conf
+#Copia configuração customizada do nginx para rodar o php
+COPY ./nginx.conf /etc/nginx/conf.d/

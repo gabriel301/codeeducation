@@ -1,0 +1,21 @@
+FROM php:7.3.6-fpm-alpine3.9
+#Instala Bash, Vim e MySql Client
+RUN apk --update add bash vim mysql-client
+
+
+#Install Compose
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#Instala as dependências do Laravel
+RUN docker-php-ext-install pdo pdo_mysql
+#RUN composer install
+WORKDIR /var/www/
+RUN rm -rf /var/www/html
+#Copia o laravel
+COPY ./laravel /var/www/
+RUN ln -s public html
+
+#Incluido no script de entrypoint após o dockerize conectar com o BD
+#RUN php artisan key:generate
+EXPOSE 9000
+ENTRYPOINT ["php-fpm"]
+
