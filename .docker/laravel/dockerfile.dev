@@ -17,12 +17,12 @@ RUN docker-php-ext-install pdo pdo_mysql
 WORKDIR /var/www/
 RUN rm -rf /var/www/html
 #Copia o codigo fonte
-#COPY ./laravel /var/www/
+COPY ./app /var/www/
 RUN ln -s public html
 #Copia o script de entry point que será rodado imediatamento quando o container subir para o root
 COPY ./entrypoint.sh /entrypoint.sh
 #Copia o template do arquivo .env para criar o verdadeiro arquivo .env no script de entry point
-COPY ./.env-template /.env-template
+COPY ./.docker/laravel/.env-template /.env-template
 
 #Permissão para o arquivo de entry point
 RUN chmod +x /entrypoint.sh

@@ -1,0 +1,24 @@
+
+FROM php:7.3.6-fpm-alpine3.9 as builder
+#Instala Bash, Vim e MySql Client
+RUN apk --update add bash vim mysql-client
+
+#Instala dockerize
+RUN apk add --no-cache openssl
+
+#Install Compose
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#Instala as dependências do Laravel
+RUN docker-php-ext-install pdo pdo_mysql
+WORKDIR /var/www/
+RUN rm -rf /var/www/html
+#Copia o codigo fonte
+COPY ./app /var/www/
+RUN ln -s public html
+RUN composer install && \
+    php artisan key:generate && \
+    php artisan cache:clear && \
+    chmod -R 775 storage
+
+EXPOSE 9000
+ENTRYPOINT ["php-fpm"]
