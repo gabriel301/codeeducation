@@ -20,7 +20,7 @@ RUN rm -rf /var/www/html
 COPY ./app /var/www/
 RUN ln -s public html
 #Copia o script de entry point que será rodado imediatamento quando o container subir para o root
-COPY ./entrypoint.sh /entrypoint.sh
+COPY ./.docker/laravel/entrypoint.sh /entrypoint.sh
 #Copia o template do arquivo .env para criar o verdadeiro arquivo .env no script de entry point
 COPY ./.docker/laravel/.env-template /.env-template
 
