@@ -25,7 +25,7 @@ Esta descrição será atualizada no decorrer do curso.
 
 #### Publicando Imagem Laravel
 
-   Para construir a imagem, executar o seguinte comando **no diretório raíz do repositório**:
+   Para construir a imagem, executar o seguinte comando **no diretório raíz do repositório**:\
   ```docker build -t <nome da imagem> -f ./.docker/laravel/dockerfile.standalone .```
 
   Imagem Gerada: [Imagem](https://hub.docker.com/repository/docker/gabriel301/laravel)
