@@ -1,0 +1,78 @@
+#Versão do Compose
+version: '3'
+
+#Configura as redes privadas e os containers que fazem parte das memas
+networks: 
+    app-network: #Rede privada nome: app-network
+        driver: bridge #Tipo de rede - Nesse caso, ela terá resolução de nomes pois não é a rede bridge padrão do docker
+
+#Serviços que serão levantados
+services: 
+    db:
+        image: mysql:5.7
+        command: --innodb-use-native-aio=0
+        container_name: db
+        restart: always
+        tty: true
+        ports:
+            - "3306:3306"
+        environment: #Variáveis de ambiente da imagem
+            - MYSQL_DATABASE=laravel
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=root
+        networks: #Rede no qual o container está inserido e que pode comunicar com outros containers
+            - app-network  
+        volumes: #Volume compartilhado, usado para guarda o BD
+            - ../.dbdata:/var/lib/mysql
+        
+            
+    app:
+        build: 
+            context: ./.. #Diretório raíz de trabalho do docker
+            dockerfile: ./.docker/laravel/dockerfile.cloudbuild #Caminho do dockerfile
+        container_name: app
+        environment: #Variáveis de ambiente do template
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_DATABASE=laravel
+            - DB_USERNAME=root
+            - DB_PASSWORD=root
+            - REDIS_HOST=redis
+            - REDIS_PASSWORD=null
+            - REDIS_PORT=6379
+            
+        #Comando que será chamado quando o container subir
+        #entrypoint: ./laravel/entrypoint.sh
+        depends_on: #Mostra quais serviços devem ser iniciados antes desse
+            - db
+            - redis
+        tty: true #Terminal Virtual habilitado
+        volumes: #Volume compartilhado, onde está o código fonte da aplicação
+            - ../app:/var/www/
+        ports: #Redirecionamento das portas (host:container)
+            - "9000:9000"
+        networks: #Rede no qual o container está inserido e que pode comunicar com outros containers
+            - app-network
+       
+    nginx:
+        build: ./nginx #Diretorio do dockerfile para criação da imagem
+        container_name: nginx
+        depends_on: #Mostra quais serviços devem ser iniciados antes desse
+            - app
+        restart: always
+        tty: true #Terminal Virtual habilitado
+        ports: #Redirecionamento das portas (host:container)
+            - "8000:80"
+        volumes: #Volume compartilhado, onde está o código fonte da aplicação
+            - ../app:/var/www/
+        networks: #Rede no qual o container está inserido e que pode comunicar com outros containers
+            - app-network
+    redis:
+        image: redis:alpine #Imagem direto do repositório
+        container_name: redis
+        expose: #Expõe a porta do container para que o outros serviços possam conectar
+            - 6379
+        networks: #Rede no qual o container está inserido e que pode comunicar com outros containers
+            - app-network
+    
+
