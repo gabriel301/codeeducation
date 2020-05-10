@@ -3,8 +3,20 @@ FROM nginx:1.15.0-alpine
 RUN apk --update add bash vim
 #Instala dockerize
 RUN apk add --no-cache openssl
+
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
     
 #Remove a configuração padrão do nginx
 RUN rm /etc/nginx/conf.d/default.conf
 #Copia configuração customizada do nginx para rodar o php
-COPY ./nginx.conf /etc/nginx/conf.d/
+COPY ./nginx-template.conf /nginx-template.conf
+ENV HOST=app
+ENV PORT=9000
+#Roda o dockerize para substituir o template pelo arquivo de configuração
+RUN dockerize --template /nginx-template.conf:/etc/nginx/conf.d/nginx.conf
+
+RUN less /etc/nginx/conf.d/nginx.conf
+
