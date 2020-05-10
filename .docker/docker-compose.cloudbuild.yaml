@@ -29,7 +29,7 @@ services:
     app:
         build: 
             context: ./.. #Diretório raíz de trabalho do docker
-            dockerfile: ./.docker/laravel/dockerfile.dev #Caminho do dockerfile
+            dockerfile: ./.docker/laravel/dockerfile.cloudbuild #Caminho do dockerfile
         container_name: app
         environment: #Variáveis de ambiente do template
             - DB_HOST=db
