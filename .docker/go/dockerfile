@@ -1,0 +1,10 @@
+#Imagem Vazia
+FROM scratch
+
+#Copiando o executável, compilado com a opção CGO_ENABLED=0 (CGO_ENABLED=0  go build -o ./build/main main.go)
+COPY ./build/main .
+
+#Executa o executável
+ENTRYPOINT [ "./main" ]
+
+    

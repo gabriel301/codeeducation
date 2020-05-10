@@ -1,8 +1,9 @@
-# Desenvolvimento de Aplicações Moderas e Escaláveis com Microsserviços
+# Desenvolvimento de Aplicações Modernas e Escaláveis com Microsserviços
 
 Repositório dos entregáveis do curso _**Desenvolvimento de Aplicações Modernas e Escaláveis com Microsserviços**_ da [**Code.Education**](https://code.education/).
 
 Esta descrição será atualizada no decorrer do curso.
+
 ## Dependências
 
 - Composer 1.10.1
@@ -18,6 +19,7 @@ Esta descrição será atualizada no decorrer do curso.
 
 - DevOps
   - [Publicando imagem Laravel](#publicando-imagem-laravel)
+  - [Desafio Docker](#desafio-docker)
 
 ## Projetos Práticos
 
@@ -29,3 +31,11 @@ Esta descrição será atualizada no decorrer do curso.
   ```docker build -t <nome da imagem> -f ./.docker/laravel/dockerfile.standalone .```
 
   Imagem Gerada: [Imagem](https://hub.docker.com/repository/docker/gabriel301/laravel)
+
+  #### Desafio Docker
+
+   Para construir a imagem, executar o seguinte comando **no diretório ./.docker/go**:\
+  ```docker build -t <nome da imagem> .```
+
+  Imagem Gerada: [Imagem](https://hub.docker.com/repository/docker/gabriel301/codeeducation)
+

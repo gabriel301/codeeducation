@@ -1,0 +1,32 @@
+FROM php:7.3.6-fpm-alpine3.9
+#Instala Bash, Vim e MySql Client
+RUN apk --update add bash vim mysql-client
+
+#Instala dockerize
+RUN apk add --no-cache openssl
+
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+#Install Compose
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#Instala as dependências do Laravel
+RUN docker-php-ext-install pdo pdo_mysql
+WORKDIR /var/www/
+RUN rm -rf /var/www/html
+#Copia o codigo fonte
+COPY ./app /var/www/
+RUN ln -s public html
+#Copia o script de entry point que será rodado imediatamento quando o container subir para o root
+COPY ./.docker/laravel/entrypoint-cloudbuild.sh /entrypoint-cloudbuild.sh
+#Copia o template do arquivo .env para criar o verdadeiro arquivo .env no script de entry point
+COPY ./.docker/laravel/.env-template /.env-template
+
+#Permissão para o arquivo de entry point
+RUN chmod +x /entrypoint-cloudbuild.sh
+
+EXPOSE 9000
+ENTRYPOINT ["/entrypoint-cloudbuild.sh"]
+
