@@ -1,12 +1,21 @@
 steps:
-    - id: "Rodando Testes Unitários"
+    - id: "Go Genarate"
       name: "gcr.io/cloud-builders/go"
-      args: ["test","soma_test.go"]
-      env: ["GOPATH=./src"]
+      args: ["generate"]
+      env: ['PROJECT_ROOT=github.com/gabriel301/codeeducation/tree/devops/cloudbuild/CI/src']
+    
+    - id: "Go Test"
+      name: "gcr.io/cloud-builders/go"
+      args: ["test","."]
+      env: ['PROJECT_ROOT=github.com/gabriel301/codeeducation/tree/devops/cloudbuild/CI/src']
 
-    - id: "Gerando Imagem"
-      name: 'gcr.io/cloud-builders/docker'
-      args: ['build','-t','gcr.io/$PROJECT_ID/desafio-ci:latest','.']
-
+    - id: "Go Build/Install"
+      name: 'gcr.io/cloud-builders/go'
+      args: ['install', '-a', '-ldflags', "'-s'", '-installsuffix', 'cgo', 'github.com/gabriel301/codeeducation/tree/devops/cloudbuild/CI/src']
+      env: [
+            'PROJECT_ROOT=github.com/gabriel301/codeeducation/tree/devops/cloudbuild/CI/src',
+            'CGO_ENABLED=0',
+            'GOOS=linux'
+          ]
 images: ['gcr.io/$PROJECT_ID/desafio-ci:latest']
     
