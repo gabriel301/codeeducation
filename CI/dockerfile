@@ -9,5 +9,5 @@
 #ENTRYPOINT [ "./main" ]
 
 FROM scratch
-COPY gopath/bin/main /main
+COPY ./bin/main /main
 CMD ["/main"]
