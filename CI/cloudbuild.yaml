@@ -1,0 +1,15 @@
+steps:
+    - id: "Rodando Testes Unitários"
+      name: "gcr.io/cloud-builders/go"
+      args: ["test"]
+      env: ["GOPATH=./src/"]
+
+    - id: "Gerando Imagem"
+      name: 'gcr.io/cloud-builders/docker'
+      args: ['build','-t','gcr.io/$PROJECT_ID/desafioCI','.']
+      images: ['gcr.io/$PROJECT_ID/desafioCI']
+
+    - id: "Rodando Testes"
+      name: 'gcr.io/cloud-builders/docker'
+      images: ['exec','-t','desafio','go','test']
+    

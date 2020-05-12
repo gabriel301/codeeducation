@@ -1,0 +1,9 @@
+FROM golang:alpine3.11
+
+WORKDIR /
+#Copiando o fonte, compilado com a opção CGO_ENABLED=0 (CGO_ENABLED=0  go build -o ./build/main main.go)
+COPY ./src/main.go .
+
+RUN CGO_ENABLED=0  go build -o . main.go
+#Executa o executável
+ENTRYPOINT [ "./main" ]
