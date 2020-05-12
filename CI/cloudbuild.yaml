@@ -1,22 +1,13 @@
 steps:
-    - id: "Go Genarate"
-      name: "gcr.io/cloud-builders/go"
-      args: ["generate"]
-      env: ['GOPATH=/gopath']
-    
     - id: "Go Test"
       name: "gcr.io/cloud-builders/go"
       args: ["test","."]
-      env: ['GOPATH=/gopath']
+      env: ['GOPATH=.']
 
-    - id: "Go Build/Install"
-      name: 'gcr.io/cloud-builders/go'
-      args: ['install', '-a', '-ldflags', "'-s'", '-installsuffix', 'cgo', 'github.com/gabriel301/codeeducation/CI/src']
-      env: [
-            'GOPATH=/gopath',
-            'CGO_ENABLED=0',
-            'GOOS=linux'
-          ]
+    - name: 'gcr.io/cloud-builders/go'
+      args: ['install', '.']
+      env: ['GOPATH=.']
+
     - id: "Gerando Imagem"
       name: 'gcr.io/cloud-builders/docker'
       args: ['build','-t','gcr.io/$PROJECT_ID/desafio-ci:latest','.']
