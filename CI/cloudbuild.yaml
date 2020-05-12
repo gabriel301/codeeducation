@@ -2,18 +2,18 @@ steps:
     - id: "Go Genarate"
       name: "gcr.io/cloud-builders/go"
       args: ["generate"]
-      env: ['PROJECT_ROOT=github.com/gabriel301/codeeducation/CI/src']
+      env: ['GOPATH=/gopath']
     
     - id: "Go Test"
       name: "gcr.io/cloud-builders/go"
       args: ["test","."]
-      env: ['PROJECT_ROOT=github.com/gabriel301/codeeducation/CI/src']
+      env: ['GOPATH=/gopath']
 
     - id: "Go Build/Install"
       name: 'gcr.io/cloud-builders/go'
       args: ['install', '-a', '-ldflags', "'-s'", '-installsuffix', 'cgo', 'github.com/gabriel301/codeeducation/CI/src']
       env: [
-            'PROJECT_ROOT=github.com/gabriel301/codeeducation/CI/src',
+            'GOPATH=/gopath',
             'CGO_ENABLED=0',
             'GOOS=linux'
           ]
