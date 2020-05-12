@@ -2,11 +2,11 @@ steps:
     - id: "Go Test"
       name: "gcr.io/cloud-builders/go"
       args: ["test","."]
-      env: ['GOPATH=.']
+      env: ['GOPATH=$PWD']
 
     - name: 'gcr.io/cloud-builders/go'
       args: ['install', '.']
-      env: ['GOPATH=.']
+      env: ['GOPATH=$PWD']
 
     - id: "Gerando Imagem"
       name: 'gcr.io/cloud-builders/docker'
