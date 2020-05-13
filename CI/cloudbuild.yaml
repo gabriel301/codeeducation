@@ -1,13 +1,13 @@
 steps:
     - id: "Go Test"
       name: "gcr.io/cloud-builders/go"
-      args: ["test","."]
-      env: ['GOPATH=.']
+      args: ["test","desafio"]
+      env: ['GOPATH=src']
       dir: 'CI'
 
     - name: 'gcr.io/cloud-builders/go'
-      args: ['install', '.']
-      env: ['GOPATH=.']
+      args: ['install', 'desafio']
+      env: ['GOPATH=src']
       dir: 'CI'
 
     - id: "Gerando Imagem"
