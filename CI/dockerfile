@@ -1,13 +1,14 @@
-#FROM golang:alpine3.11
+FROM golang:alpine3.11 as build
 
-#WORKDIR /
+WORKDIR /
 #Copiando o fonte, compilado com a opção CGO_ENABLED=0 (CGO_ENABLED=0  go build -o ./build/main main.go)
-#COPY ./src/main.go .
+COPY ./src/soma/soma.go .
 
-#RUN CGO_ENABLED=0  go build -o . main.go
+RUN go install .
 #Executa o executável
 #ENTRYPOINT [ "./main" ]
 
 FROM scratch
-COPY ./bin/soma /soma
+WORKDIR /
+COPY --from=build / /
 CMD ["/soma"]
